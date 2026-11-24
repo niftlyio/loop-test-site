@@ -1,0 +1,12 @@
+{
+  "name": "Maple Street Bakery",
+  "tagline": "Fresh bread and pastries, baked every morning.",
+  "phone": "(405) 555-0142",
+  "email": "hello@maplestreetbakery.example",
+  "address": "214 Maple Street, Oklahoma City, OK 73102",
+  "hours": [
+    { "days": "Monday to Friday", "open": "7:00 am", "close": "5:00 pm" },
+    { "days": "Saturday", "open": "8:00 am", "close": "3:00 pm" },
+    { "days": "Sunday", "open": null, "close": null }
+  ]
+}

@@ -1,0 +1,14 @@
+---
+import Base from "../layouts/Base.astro";
+import site from "../data/site.json";
+---
+
+<Base title="About" description={`The story behind ${site.name}.`}>
+  <h1>About us</h1>
+  <p class="lead">A small neighbourhood bakery, open since 2014.</p>
+  <p>
+    We started with one oven and a sourdough starter. Today a team of six bakes everything on site, from scratch,
+    before the doors open.
+  </p>
+  <p>We buy our flour from Oklahoma mills and our butter from a dairy an hour up the road.</p>
+</Base>

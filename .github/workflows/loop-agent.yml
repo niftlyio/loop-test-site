@@ -1,0 +1,64 @@
+# Niftly loop agent — copy into each client repo at .github/workflows/loop-agent.yml
+#
+# Triggered when the loops portal applies the `agent-ready` label to a task issue.
+# Runs Claude Code pinned to Sonnet (cost control: no Opus by default), implements
+# the change, and opens a PR that references the issue. If requirements are
+# ambiguous the agent posts its questions back on the issue instead of guessing;
+# the portal webhook picks those up as clarifications.
+#
+# Per-repo setup (see docs/client-loops.md in the website repo):
+#   1. Install the Claude GitHub App on this repo (https://github.com/apps/claude)
+#   2. Add this client's own ANTHROPIC_API_KEY as an Actions secret
+#   3. Commit this file
+# The `agent-ready` and `loop-task` labels are created automatically by the portal.
+
+name: Loop agent
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+
+concurrency:
+  group: loop-agent-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  implement:
+    if: github.event.label.name == 'agent-ready'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Claude Code on the task
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Sonnet only, bounded turns — the caps are the runaway-spend guard.
+          claude_args: "--model claude-sonnet-4-6 --max-turns 30"
+          prompt: |
+            You are implementing a pre-approved client task in this repository.
+            The complete specification is the body of issue #${{ github.event.issue.number }}.
+            Read it with `gh issue view ${{ github.event.issue.number }}`.
+
+            Rules:
+            - Implement exactly what the spec asks for on a new branch named
+              `loop/issue-${{ github.event.issue.number }}`, then open a pull
+              request whose description includes "Fixes #${{ github.event.issue.number }}".
+            - Follow the repository's existing conventions, and run existing
+              lint/tests if the project defines them.
+            - If the specification is ambiguous, contradictory, or you cannot
+              complete it confidently within this session, DO NOT guess and DO
+              NOT open a PR. Instead post ONE comment on the issue that lists
+              your questions and contains this exact marker on its own line:
+              <!-- loop-agent:question -->
+              Then stop.

@@ -1,0 +1,18 @@
+---
+import Base from "../layouts/Base.astro";
+import site from "../data/site.json";
+---
+
+<Base title="Home">
+  <h1>Welcome to {site.name}</h1>
+  <p class="lead">{site.tagline}</p>
+
+  <h2>What we bake</h2>
+  <ul>
+    <li>Sourdough loaves</li>
+    <li>Butter croissants</li>
+    <li>Cinnamon rolls</li>
+  </ul>
+
+  <p><a href="/contact/">See our opening hours and how to find us</a></p>
+</Base>
