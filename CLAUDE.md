@@ -1,6 +1,6 @@
-# Loop test site
+# Request test site
 
-A small Astro site for a made-up bakery. It exists only as a target for testing Niftly's AI update loops.
+A small Astro site for a made-up bakery. It exists only as a target for testing requests for changes from the Niftly portal.
 
 ## Layout
 
