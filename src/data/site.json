@@ -2,6 +2,7 @@
   "name": "Maple Street Bakery",
   "tagline": "Fresh bread and pastries, baked every morning.",
   "phone": "(405) 555-0142",
+  "secondPhone": "(405) 555-0142",
   "email": "hello@maplestreetbakery.example",
   "address": "214 Maple Street, Oklahoma City, OK 73102",
   "hours": [
